@@ -65,10 +65,49 @@ void parse_file ( char * filename,
     f = stdin;
   else
     f = fopen(filename, "r");
+
+  enum script_function current_fxn;
+  int args[6]; // the maximum number of number args is 6
   
   while ( fgets(line, 255, f) != NULL ) {
     line[strlen(line)-1]='\0';
     printf(":%s:\n",line);
+    // NEW COMMAND STARTS
+    if      (!strcmp(line,"line")){
+      // command LINE: don't do anything but indicate function for next line's args
+      current_fxn = FN_LINE;
+    }else if(!strcmp(line,"ident")){
+      // command IDENT
+      ident(transform);
+    }else if(!strcmp(line,"scale")){
+      // command SCALE: wait for args, next line
+      current_fxn = FN_SCALE;
+    }else if(!strcmp(line,"move")){
+      // command MOVE: wait for args, next line
+      current_fxn = FN_MOVE;
+    }else if(!strcmp(line,"rotate")){
+      // command ROTATE: wait for args, next line
+      current_fxn = FN_ROTATE;
+    }else if(!strcmp(line,"apply")){
+      // command APPLY
+      matrix_mult(transform,edges);
+    }else if(!strcmp(line,"save")){
+      // command SAVE: wait for args, next line
+      current_fxn = FN_SAVE;
+    }else{
+      // if we get here, we don't have a new function call; use args!
+      switch(current_fxn){
+
+      case FN_LINE:
+	break;
+      case FN_MOVE:
+	break;
+      case FN_ROTATE:
+	break;
+      case FN_SAVE:
+	break;
+      }
+    }
   }
 }
   
