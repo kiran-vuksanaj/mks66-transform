@@ -39,6 +39,7 @@ as the scale factors
 ====================*/
 struct matrix * make_scale(double x, double y, double z) {
   struct matrix * out = new_matrix(4,4);
+  printf("making scale\n");
   ident(out);
   out->m[0][0] = x;
   out->m[1][1] = y;
@@ -53,7 +54,12 @@ Returns: The rotation matrix created using theta as the
 angle of rotation and X as the axis of rotation.
 ====================*/
 struct matrix * make_rotX(double theta) {
-  return NULL;
+  struct matrix * out = new_matrix(4,4);
+  out->m[1][1] = cos(theta);
+  out->m[1][2] = -sin(theta);
+  out->m[2][1] = sin(theta);
+  out->m[2][2] = cos(theta);
+  return out;
 }
 
 /*======== struct matrix * make_rotY() ==========
@@ -63,7 +69,12 @@ Returns: The rotation matrix created using theta as the
 angle of rotation and Y as the axis of rotation.
 ====================*/
 struct matrix * make_rotY(double theta) {
-  return NULL;
+  struct matrix * out = new_matrix(4,4);
+  out->m[0][0] = cos(theta);
+  out->m[0][2] = sin(theta);
+  out->m[2][0] = -sin(theta);
+  out->m[2][2] = cos(theta);
+  return out;
 }
 
 /*======== struct matrix * make_rotZ() ==========

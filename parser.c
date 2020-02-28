@@ -121,17 +121,19 @@ void parse_file ( char * filename,
 	transform = make_translate(args[0],args[1],args[2]);
 	break;
       case FN_SCALE:
+	sscanf(line,"%lf %lf %lf",&args[0],&args[1],&args[2]);
+	transform = make_scale(args[0],args[1],args[2]);
 	break;
       case FN_ROTATE:
 	sscanf(line,"%c %lf",&c_arg,&args[0]);
+	free_matrix(transform);
 	// print_matrix(transform);
 	switch(c_arg){
 	case 'x':
-	  ident(transform);
+	  transform = make_rotX(args[0]);
 	  break;
 	case 'y':
-	  ident(transform);
-	  // transform = make_rotY(args[0]);
+	  transform = make_rotY(args[0]);
 	  break;
 	case 'z':
 	  transform = make_rotZ(args[0]);
