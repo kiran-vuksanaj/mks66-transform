@@ -95,7 +95,11 @@ void parse_file ( char * filename,
       current_fxn = FN_ROTATE;
     }else if(!strcmp(line,"apply")){
       // command APPLY
+      printf("pre-mult\n");
+      print_matrix(edges);
+      print_matrix(transform);
       matrix_mult(transform,edges);
+      printf("post-mult\n");
     }else if(!strcmp(line,"display")){
       // command DISPLAY
       clear_screen(s);
@@ -113,23 +117,24 @@ void parse_file ( char * filename,
 	break;
       case FN_MOVE:
 	sscanf(line,"%lf %lf %lf",&args[0],&args[1],&args[2]);
-	free_matrix(transform);
+	// free_matrix(transform);
 	transform = make_translate(args[0],args[1],args[2]);
 	break;
       case FN_SCALE:
 	break;
       case FN_ROTATE:
 	sscanf(line,"%c %lf",&c_arg,&args[0]);
-	free_matrix(transform);
+	// print_matrix(transform);
 	switch(c_arg){
 	case 'x':
-	  transform = make_rotX(args[0]);
+	  ident(transform);
 	  break;
 	case 'y':
+	  ident(transform);
 	  // transform = make_rotY(args[0]);
 	  break;
 	case 'z':
-	  // transform = make_rotZ(args[0]);
+	  transform = make_rotZ(args[0]);
 	  break;
 	}
 	break;
