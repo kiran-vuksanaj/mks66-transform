@@ -97,6 +97,7 @@ void parse_file ( char * filename,
     }else if(!strcmp(line,"apply")){
       // command APPLY
       matrix_mult(transform,edges);
+      print_matrix(edges);
     }else if(!strcmp(line,"display")){
       // command DISPLAY
       clear_screen(s);
@@ -114,7 +115,6 @@ void parse_file ( char * filename,
 	break;
       case FN_MOVE:
 	sscanf(line,"%lf %lf %lf",&args[0],&args[1],&args[2]);
-	// free_matrix(transform)
 	indiv_transform = make_translate(args[0],args[1],args[2]);
 	matrix_mult(indiv_transform,transform);
 	break;
@@ -126,8 +126,6 @@ void parse_file ( char * filename,
       case FN_ROTATE:
 	sscanf(line,"%c %lf",&c_arg,&args[0]);
 	args[0] = args[0] * M_PI / 180.0;
-	free_matrix(transform);
-	// print_matrix(transform);
 	switch(c_arg){
 	case 'x':
 	  indiv_transform = make_rotX(args[0]);
@@ -135,6 +133,9 @@ void parse_file ( char * filename,
 	  break;
 	case 'y':
 	  indiv_transform = make_rotY(args[0]);
+	  printf("\n");
+	  print_matrix(indiv_transform);
+	  printf("\n");
 	  matrix_mult(indiv_transform,transform);
 	  break;
 	case 'z':

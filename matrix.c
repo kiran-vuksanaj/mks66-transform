@@ -73,6 +73,7 @@ angle of rotation and Y as the axis of rotation.
 ====================*/
 struct matrix * make_rotY(double theta) {
   struct matrix * out = new_matrix(4,4);
+  ident(out);
   out->m[0][0] = cos(theta);
   out->m[0][2] = sin(theta);
   out->m[2][0] = -sin(theta);

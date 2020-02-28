@@ -38,6 +38,8 @@ rotate
 z 20
 rotate
 x 5
+rotate
+y 20
 apply
 display
 save
