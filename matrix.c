@@ -55,10 +55,13 @@ angle of rotation and X as the axis of rotation.
 ====================*/
 struct matrix * make_rotX(double theta) {
   struct matrix * out = new_matrix(4,4);
+  ident(out);
   out->m[1][1] = cos(theta);
   out->m[1][2] = -sin(theta);
   out->m[2][1] = sin(theta);
   out->m[2][2] = cos(theta);
+  printf("just made rotx\n");
+  print_matrix(out);
   return out;
 }
 
@@ -85,6 +88,7 @@ angle of rotation and Z as the axis of rotation.
 ====================*/
 struct matrix * make_rotZ(double theta) {
   struct matrix *out = new_matrix(4,4);
+  printf("making rotz\n");
   ident(out);
   out->m[0][0] = cos(theta);
   out->m[0][1] = -1 * sin(theta);

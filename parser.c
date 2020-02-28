@@ -73,6 +73,7 @@ void parse_file ( char * filename,
   enum script_function current_fxn;
   double args[6]; // the maximum number of number args is 6
   char c_arg;
+  struct matrix *indiv_transform;
   
   while ( fgets(line, 255, f) != NULL ) {
     line[strlen(line)-1]='\0';
@@ -95,11 +96,7 @@ void parse_file ( char * filename,
       current_fxn = FN_ROTATE;
     }else if(!strcmp(line,"apply")){
       // command APPLY
-      printf("pre-mult\n");
-      print_matrix(edges);
-      print_matrix(transform);
       matrix_mult(transform,edges);
-      printf("post-mult\n");
     }else if(!strcmp(line,"display")){
       // command DISPLAY
       clear_screen(s);
@@ -117,26 +114,32 @@ void parse_file ( char * filename,
 	break;
       case FN_MOVE:
 	sscanf(line,"%lf %lf %lf",&args[0],&args[1],&args[2]);
-	// free_matrix(transform);
-	transform = make_translate(args[0],args[1],args[2]);
+	// free_matrix(transform)
+	indiv_transform = make_translate(args[0],args[1],args[2]);
+	matrix_mult(indiv_transform,transform);
 	break;
       case FN_SCALE:
 	sscanf(line,"%lf %lf %lf",&args[0],&args[1],&args[2]);
-	transform = make_scale(args[0],args[1],args[2]);
+	indiv_transform = make_scale(args[0],args[1],args[2]);
+	matrix_mult(indiv_transform,transform);
 	break;
       case FN_ROTATE:
 	sscanf(line,"%c %lf",&c_arg,&args[0]);
+	args[0] = args[0] * M_PI / 180.0;
 	free_matrix(transform);
 	// print_matrix(transform);
 	switch(c_arg){
 	case 'x':
-	  transform = make_rotX(args[0]);
+	  indiv_transform = make_rotX(args[0]);
+	  matrix_mult(indiv_transform,transform);
 	  break;
 	case 'y':
-	  transform = make_rotY(args[0]);
+	  indiv_transform = make_rotY(args[0]);
+	  matrix_mult(indiv_transform,transform);
 	  break;
 	case 'z':
-	  transform = make_rotZ(args[0]);
+	  indiv_transform = make_rotZ(args[0]);
+	  matrix_mult(indiv_transform,transform);
 	  break;
 	}
 	break;
@@ -145,6 +148,7 @@ void parse_file ( char * filename,
 	break;
       }
     }
+    print_matrix(transform);
   }
 }
   

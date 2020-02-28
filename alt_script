@@ -25,7 +25,19 @@ line
 display
 ident
 scale
-1 4 4
+2 2 2
+apply
+display
+ident
+move
+100 100 0
+apply
+display
+ident
+rotate
+z 20
+rotate
+x 5
 apply
 display
 save
