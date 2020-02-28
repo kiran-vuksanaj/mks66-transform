@@ -60,6 +60,10 @@ void parse_file ( char * filename,
   FILE *f;
   char line[256];
   clear_screen(s);
+  color c;
+  c.red = 255;
+  c.green = 255;
+  c.blue = 255;
 
   if ( strcmp(filename, "stdin") == 0 ) 
     f = stdin;
@@ -67,7 +71,8 @@ void parse_file ( char * filename,
     f = fopen(filename, "r");
 
   enum script_function current_fxn;
-  int args[6]; // the maximum number of number args is 6
+  double args[6]; // the maximum number of number args is 6
+  char c_arg;
   
   while ( fgets(line, 255, f) != NULL ) {
     line[strlen(line)-1]='\0';
@@ -91,6 +96,10 @@ void parse_file ( char * filename,
     }else if(!strcmp(line,"apply")){
       // command APPLY
       matrix_mult(transform,edges);
+    }else if(!strcmp(line,"display")){
+      // command DISPLAY
+      clear_screen(s);
+      draw_lines(edges,s,c);
     }else if(!strcmp(line,"save")){
       // command SAVE: wait for args, next line
       current_fxn = FN_SAVE;
@@ -99,12 +108,33 @@ void parse_file ( char * filename,
       switch(current_fxn){
 
       case FN_LINE:
+	sscanf(line,"%lf %lf %lf %lf %lf %lf",&args[0],&args[1],&args[2],&args[3],&args[4],&args[5]);
+	add_edge(edges,args[0],args[1],args[2],args[3],args[4],args[5]);
 	break;
       case FN_MOVE:
+	sscanf(line,"%lf %lf %lf",&args[0],&args[1],&args[2]);
+	free_matrix(transform);
+	transform = make_translate(args[0],args[1],args[2]);
+	break;
+      case FN_SCALE:
 	break;
       case FN_ROTATE:
+	sscanf(line,"%c %lf",&c_arg,&args[0]);
+	free_matrix(transform);
+	switch(c_arg){
+	case 'x':
+	  transform = make_rotX(args[0]);
+	  break;
+	case 'y':
+	  // transform = make_rotY(args[0]);
+	  break;
+	case 'z':
+	  // transform = make_rotZ(args[0]);
+	  break;
+	}
 	break;
       case FN_SAVE:
+	save_extension(s,line);
 	break;
       }
     }
